@@ -58,7 +58,7 @@ class ParentActor extends AbstractActor {
         );
     }
 }
-public class SupervisorStrategyTest {
+public class OneForOneStrategyTest {
     public static void main(String[] args) {
         ActorSystem system = ActorSystem.create("SupervisionSystem");
 
