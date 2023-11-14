@@ -4,10 +4,12 @@ import akka.actor.*;
 import akka.actor.AbstractActor.Receive;
 import akka.actor.Identify;
 import akka.actor.ActorIdentity;
+import scala.Option;
 import scala.concurrent.duration.FiniteDuration;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class CounterActor extends AbstractActorWithTimers {
 
@@ -64,11 +66,19 @@ public class CounterActor extends AbstractActorWithTimers {
     private void handleActorIdentity(ActorIdentity identity) {
         // 处理ActorIdentity消息，更新计数器并向找到的Actor发送Identify消息
         String cId = identity.correlationId().toString();
-        ActorRef ref = identity.getActorRef().get();
-        if (ref != null) {
+//        ActorRef ref = identity.getActorRef().get();
+//        if (ref != null) {
+//            counters.put(cId, counters.getOrDefault(cId, 0) + 1);
+//            System.out.println("count: " + counters.get(cId));
+//            getContext().actorSelection(ref.path() + "/*").tell(new Identify(cId), self());
+//        }
+        Optional<ActorRef> refOption = identity.getActorRef();
+
+        if (refOption.isPresent()) {
+            ActorRef ref = refOption.get();
             counters.put(cId, counters.getOrDefault(cId, 0) + 1);
             System.out.println("count: " + counters.get(cId));
-            ref.tell(new Identify(cId), self());
+            getContext().actorSelection(ref.path() + "/*").tell(new Identify(cId), self());
         }
     }
 

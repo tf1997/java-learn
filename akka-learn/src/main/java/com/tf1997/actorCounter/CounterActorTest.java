@@ -16,17 +16,21 @@ public class CounterActorTest {
 
         // 创建 CounterActor
         ActorRef counterActor = system.actorOf(Props.create(CounterActor.class), "counterActor");
+        ActorRef s1 = system.actorOf(Props.create(SampleActor.class), "s1");
+        ActorRef s2 = system.actorOf(Props.create(SampleActor.class), "s2");
+        ActorRef s3 = system.actorOf(Props.create(SampleActor.class), "s3");
+        ActorRef s4 = system.actorOf(Props.create(SampleActor.class), "s4");
 
         // 发送 CountRequest 消息给 CounterActor
         CounterActor.CountRequest countRequest = new CounterActor.CountRequest("request1", Duration.create(5, TimeUnit.SECONDS));
         counterActor.tell(countRequest, ActorRef.noSender());
 
         // 等待一段时间，确保 CounterActor 有足够的时间进行处理
-        try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(6000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         // 关闭 Actor 系统
         system.terminate();
